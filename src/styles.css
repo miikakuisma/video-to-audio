@@ -1,0 +1,66 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+  background: #333;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.drop-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background: transparent;
+}
+
+#waveform {
+  position: absolute;
+  top: calc(50% - 120px);
+  left: calc(50% - 160px);
+  right: 0;
+}
+
+.spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #eee;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.spinner img {
+  width: 64px;
+  height: 64px;
+  padding-left: 26px;
+}
+
+.message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #eee;
+}
+
+button {
+  position: absolute;
+  z-index: 2;
+  top: calc(50% + 40px);
+}
