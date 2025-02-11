@@ -8,6 +8,4 @@ We read the video file and play the audio track into offlineAudioContext, which 
 
 ## Live demo
 
-You can check it at https://video-to-audio.netlify.app
-
-[![Netlify Status](https://api.netlify.com/api/v1/badges/17cd8e2c-db8b-4940-b700-0f29d6f8fcf6/deploy-status)](https://app.netlify.com/sites/boring-khorana-d5b562/deploys)
+You can check it at https://video-to-audio-ten.vercel.app/
