@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 const propTypes = {
@@ -14,84 +14,74 @@ const defaultProps = {
   className: "drop-area"
 };
 
-class FileDrop extends Component {
-  state = {
-    dragging: false
-  };
+function FileDrop(props) {
+  const [dragging, setDragging] = useState(false);
+  const dropRef = useRef(null);
 
-  dropRef = React.createRef();
-
-  handleDrag = (e) => {
+  const handleDrag = (e) => {
     e.dataTransfer.dropEffect = "copy";
     e.preventDefault();
     e.stopPropagation();
   };
 
-  handleDragIn = (e) => {
-    const { onDragIn } = this.props;
+  const handleDragIn = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
-      this.setState({ dragging: true });
-      if (onDragIn) onDragIn();
+      setDragging(true);
+      if (props.onDragIn) props.onDragIn();
     }
   };
 
-  handleDragOut = (e) => {
-    const { onDragOut } = this.props;
+  const handleDragOut = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({ dragging: false });
-    if (onDragOut) onDragOut();
+    setDragging(false);
+    if (props.onDragOut) props.onDragOut();
   };
 
-  handleDrop = (e) => {
-    const { onDrop } = this.props;
+  const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({ dragging: false });
+    setDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      if (onDrop) onDrop(e.dataTransfer.files);
+      if (props.onDrop) props.onDrop(e.dataTransfer.files);
     }
   };
 
-  componentDidMount() {
-    let element = this.dropRef.current;
-    element.addEventListener("dragenter", this.handleDragIn);
-    element.addEventListener("dragleave", this.handleDragOut);
-    element.addEventListener("dragover", this.handleDrag);
-    element.addEventListener("drop", this.handleDrop);
-  }
+  useEffect(() => {
+    const element = dropRef.current;
+    if (element) {
+      element.addEventListener("dragenter", handleDragIn);
+      element.addEventListener("dragleave", handleDragOut);
+      element.addEventListener("dragover", handleDrag);
+      element.addEventListener("drop", handleDrop);
 
-  componentWillUnmount() {
-    let element = this.dropRef.current;
-    element.removeEventListener("dragenter", this.handleDragIn);
-    element.removeEventListener("dragleave", this.handleDragOut);
-    element.removeEventListener("dragover", this.handleDrag);
-    element.removeEventListener("drop", this.handleDrop);
-  }
+      return () => {
+        element.removeEventListener("dragenter", handleDragIn);
+        element.removeEventListener("dragleave", handleDragOut);
+        element.removeEventListener("dragover", handleDrag);
+        element.removeEventListener("drop", handleDrop);
+      };
+    }
+  }, [handleDrag, handleDragIn, handleDragOut, handleDrop]);
 
-  render() {
-    return (
-      <div
-        className={this.props.className}
-        ref={this.dropRef}
-        style={{
-          ...defaultProps.style,
-          ...this.props.style
-        }}
-        onClick={() => {
-          if (this.props.onClick) {
-            this.props.onClick();
-          }
-        }}
-      >
-        {this.props.children}
-      </div>
-    );
-  }
+  return (
+    <div
+      className={props.className}
+      ref={dropRef}
+      style={{
+        ...defaultProps.style,
+        ...props.style
+      }}
+      onClick={props.onClick}
+    >
+      {props.children}
+    </div>
+  );
 }
 
 FileDrop.propTypes = propTypes;
 FileDrop.defaultProps = defaultProps;
+
 export default FileDrop;
